@@ -38,11 +38,15 @@ int main() {
         buffer[n] = '\0';
         std::cout << "Server received: " << buffer << std::endl;
 
+        // Replying to client
         ssize_t sent = sendto(sockfd, buffer, n, 0, (sockaddr*)&clientaddr, len);
         if (sent < 0) {
             perror("sendto failed");
             break;
         }
+
+        //Wait 100 seconds before next interaction
+        sleep(100);
     }
 
     close(sockfd);
