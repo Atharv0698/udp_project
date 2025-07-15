@@ -1,0 +1,2 @@
+add_executable(udp_client main.cpp)
+target_compile_features(udp_client PRIVATE cxx_std_17)

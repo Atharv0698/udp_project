@@ -1,0 +1,2 @@
+add_executable(udp_server main.cpp)
+target_compile_features(udp_server PRIVATE cxx_std_17)
