@@ -30,33 +30,24 @@ int main() {
     servaddr.sin_port = htons(8080);
     servaddr.sin_addr = ((sockaddr_in*)res->ai_addr)->sin_addr;
 
-    
-    sockaddr_in fromaddr{};
-    socklen_t fromlen = sizeof(fromaddr);
-    char buffer[1024];
+
+    int sequence = 0;
 
     while (true) {
-        const char* message = "Hi from client!";
-        ssize_t sent = sendto(sockfd, message, strlen(message), 0,
+        std::string message = "SEQ:" + std::to_string(sequence);
+        ssize_t sent = sendto(sockfd, message.c_str(), message.size(), 0,
                               (const struct sockaddr*)&servaddr, sizeof(servaddr));
+
         if (sent < 0) {
             perror("send operation failed");
             break;
         }
 
-        std::cout << "[CLIENT] Message sent to server.\n";
+        std::cout << "[CLIENT] Sent message: " << message << std::endl;
+       
+        
+        sequence++;
 
-        // Receive reply from server
-        ssize_t n = recvfrom(sockfd, buffer, sizeof(buffer) - 1, 0,
-                             (sockaddr*)&fromaddr, &fromlen);
-        if (n < 0) {
-            perror("recvfrom failed");
-            break;
-        }
-        buffer[n] = '\0';
-        std::cout << "[CLIENT] Received from server: " << buffer << std::endl;
-
-        // Wait 100 seconds (0.01 Hz)
         sleep(100);
 
     }
